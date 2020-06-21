@@ -1,0 +1,7 @@
+#+TITLE: deno-watch
+
+Little utility to automatically compile and reload modules.
+
+* Usage
+
+	~deno run --allow-read --allow-run deno-watch.ts <file>~
