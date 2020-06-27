@@ -2,6 +2,10 @@
 
 Little utility to automatically compile and reload modules.
 
+* Installation
+
+  ~deno install --allow-run --allow-read --allow-net https://raw.githubusercontent.com/0-l/deno-watch/master/deno-watch.ts~
+
 * Usage
 
-	~deno run --allow-read --allow-run deno-watch.ts <file>~
+  ~deno-watch run <flags> <file>~

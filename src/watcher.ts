@@ -5,17 +5,33 @@ import System      from './sys.ts';
 import Help        from './help.ts';
 import FileHandler from './file-handler.ts';
 
+export const source_file = (args: string[]): string => {
+	const extensions = ['json', 'js', 'ts'];
+
+	const hasExtension = (str: string): boolean =>
+		extensions.includes(str.split('.')[1]);
+
+	const isFlag = (str: string): boolean =>
+		str.charAt(0) === '-';
+
+	const source =
+		args.filter(arg => hasExtension(arg) && !isFlag(arg));
+
+	return source[0];
+};
+
 export class Watcher {
 	path: string;
 	cache: Cache;
 	fileHandler: FileHandler;
 	sys: System;
 
-	constructor(path: string) {
-		this.path = path;
+	constructor(args: string[]) {
+		this.path = source_file(args);
+
 		this.cache = new Cache();
+		this.sys = new System(this.path, args);
 		this.fileHandler = new FileHandler(this.cache);
-		this.sys = new System();
 	}
 
 	watch(): void {
@@ -51,5 +67,7 @@ export class Watcher {
 		}, 1000);
 	}
 
-	private watchDir(stats: FileStats): void { }
+	private watchDir(stats: FileStats): void {
+		console.log('stats', stats);
+	}
 }
