@@ -5,20 +5,7 @@ import System      from './sys.ts';
 import Help        from './help.ts';
 import FileHandler from './file-handler.ts';
 
-export const source_file = (args: string[]): string => {
-	const extensions = ['json', 'js', 'ts'];
-
-	const hasExtension = (str: string): boolean =>
-		extensions.includes(str.split('.')[1]);
-
-	const isFlag = (str: string): boolean =>
-		str.charAt(0) === '-';
-
-	const source =
-		args.filter(arg => hasExtension(arg) && !isFlag(arg));
-
-	return source[0];
-};
+import './ext.ts';
 
 export class Watcher {
 	path: string;
@@ -27,7 +14,7 @@ export class Watcher {
 	sys: System;
 
 	constructor(args: string[]) {
-		this.path = source_file(args);
+		this.path = args.src();
 
 		this.cache = new Cache();
 		this.sys = new System(this.path, args);
@@ -41,7 +28,7 @@ export class Watcher {
 		this.parsePath();
 	}
 
-	private parsePath(): void {
+	private async parsePath(): Promise<void> {
 		const stats: FileStats = Deno.statSync(this.path);
 
 		if (stats.isFile)
